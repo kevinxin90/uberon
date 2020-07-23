@@ -1,0 +1,21 @@
+{
+    "version": "1.0",
+    "__metadata__": {
+        "license_url": "http://uberon.github.io/downloads.html",
+        "licence": "",
+        "url": "http://uberon.github.io/downloads.html"
+    },
+    "requires": [
+        "networkx",
+        "obonet"
+    ],
+    "dumper": {
+        "data_url": "http://purl.obolibrary.org/obo/uberon/ext.obo",
+        "uncompress": false,
+        "release": "version:get_release"
+    },
+    "uploader": {
+        "parser": "parser:load_data",
+        "on_duplicates": "error"
+    }
+}
