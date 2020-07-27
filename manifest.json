@@ -10,7 +10,7 @@
         "obonet"
     ],
     "dumper": {
-        "data_url": "http://purl.obolibrary.org/obo/uberon/ext.obo",
+        "data_url": "http://purl.obolibrary.org/obo/uberon.obo",
         "uncompress": false,
         "release": "version:get_release"
     },
