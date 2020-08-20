@@ -17,12 +17,12 @@ def load_data(data_folder):
                 for val in rec.get("xref"):
                     if ":" in val:
                         prefix, id = val.split(':', 1)
-                        if prefix in ["http", "https"]:
-                            continue
                         if prefix in ['UMLS', 'MESH']:
                             xrefs[prefix.lower()].add(id)
-                        else:
+                        if prefix == 'EFO':
                             xrefs[prefix.lower()].add(val)
+                        else:
+                            continue
                 for k, v in xrefs.items():
                     xrefs[k] = list(v)
                 rec.pop("xref")
