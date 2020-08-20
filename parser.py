@@ -35,6 +35,7 @@ def load_data(data_folder):
         if item.startswith("UBERON:"):
             rec = graph.nodes[item]
             rec["_id"] = item
+            rec["uberon"] = item
             if rec.get("is_a"):
                 rec["parents"] = [parent for parent in rec.pop("is_a") if parent.startswith("UBERON:")]
             if rec.get("xref"):
