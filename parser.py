@@ -2,6 +2,31 @@ from collections import defaultdict
 import networkx as nx
 import obonet
 import os
+import re
+
+def get_synonyms(data):
+    """Format synonyms as dicionary
+    exact and related synonyms are the keys, and their values are in lists
+    """
+    if 'synonym' in data:
+        syn_dict = {}
+        exact = []
+        related = []
+        for syn in data['synonym']:
+            if 'EXACT' in syn: 
+                match = re.findall(r'\"(.+?)\"', syn)
+                exact = exact + match
+            elif 'RELATED' in syn: 
+                match = re.findall(r'\"(.+?)\"', syn)
+                related = related + match
+        synonyms = {}
+        if len(exact) > 0:
+            synonyms["exact"] = exact
+        if len(related) > 0:
+            synonyms["related"] = related
+        return synonyms
+    else:
+        return {}
 
 def load_data(data_folder):
     path = os.path.join(data_folder, "uberon.obo")
@@ -19,7 +44,7 @@ def load_data(data_folder):
                         prefix, id = val.split(':', 1)
                         if prefix in ['UMLS', 'MESH']:
                             xrefs[prefix.lower()].add(id)
-                        if prefix == 'EFO':
+                        elif prefix == 'EFO':
                             xrefs[prefix.lower()].add(val)
                         else:
                             continue
@@ -30,6 +55,7 @@ def load_data(data_folder):
             rec["children"] = [child for child in graph.predecessors(item) if child.startswith("UBERON:")]
             rec["ancestors"] = [ancestor for ancestor in nx.descendants(graph, item) if ancestor.startswith("UBERON:")]
             rec["descendants"] = [descendant for descendant in nx.ancestors(graph,item) if descendant.startswith("UBERON:")]
+            rec['synonym'] = get_synonyms(rec)
             if rec.get("created_by"):
                 rec.pop("created_by")
             if rec.get("creation_date"):
